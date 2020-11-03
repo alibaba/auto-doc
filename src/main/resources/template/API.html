@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="dataq-doc">
+    <title>API Reference</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+    <link rel="stylesheet" href="API.css"/>
+    <script src="https://cdn.bootcss.com/jquery/1.12.2/jquery.js"></script>
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+    <div id="toc" class="toc2">
+        <div id="toctitle"><span>API Reference</span></div>
+        <ul id="accordion" class="sectlevedictListl1">
+            <%for(apiClass in templateApiClassList){%>
+                <li><a class="dd" href="#_${apiClass.id}">${apiClass.order}.&nbsp;<%if(isNotEmpty(apiClass.desc)){%>${apiClass.desc}<%}else{%>${apiClass.className}<%}%></a>
+                    <ul class="sectlevel2"><%for(apiMethod in apiClass.apiMethodList){%>
+                        <li><%if(apiMethod.deprecated){%><a href="#_${apiMethod.methodId}">${apiClass.order}.${apiMethod.order}.&nbsp;<span class="line-through">${apiMethod.comment}</span></a><%}else{%>
+                            <a href="#_${apiMethod.methodId}">${apiClass.order}.${apiMethod.order}.&nbsp;${apiMethod.comment}</a><%}%>
+                        </li>
+                        <%}%>
+                    </ul>
+                </li>
+            <%}%>
+        </ul>
+    </div>
+</div>
+<div id="content">
+    <%for(apiClass in templateApiClassList){%>
+    <div class="sect1">
+        <h2 id="_${apiClass.id}">
+            <a class="anchor" href="#_${apiClass.id}"></a>
+            <a class="link" href="#_${apiClass.id}">${apiClass.order}.&nbsp;<%if(isNotEmpty(apiClass.desc)){%>${apiClass.desc}<%}else{%>${apiClass.className}<%}%></a>
+        </h2>
+        <div class="sectionbody">
+            <%for(apiMethod in apiClass.apiMethodList){%>
+            <div class="sect2"><h3 id="_${apiMethod.methodId}"><a class="anchor" href="#_${apiMethod.methodId}"></a>
+                <%if(apiMethod.deprecated){%><a class="link" href="#_${apiMethod.methodId}">${apiClass.order}.${apiMethod.order}.&nbsp;<span class="line-through">${apiMethod.comment}</span></a><%}else{%>
+                <a class="link" href="#_${apiMethod.methodId}">${apiClass.order}.${apiMethod.order}.&nbsp;${apiMethod.comment}</a><%}%></h3>
+                <div class="paragraph"><p><strong>URL:</strong>&nbsp;${apiMethod.url}</p></div>
+                <div class="paragraph"><p><strong>Type:</strong>&nbsp;${apiMethod.httpMethod}</p></div>
+                <%if(isNotEmpty(apiMethod.author)){%>
+                <div class="paragraph"><p><strong>Author:</strong>&nbsp;${apiMethod.author}</p></div>
+                <%}%>
+                <div class="paragraph"><p><strong>Content-Type:</strong>&nbsp;${apiMethod.contentType}</p></div>
+                <%if(isNotEmpty(apiMethod.apiNote)){%>
+                <div class="paragraph"><p><strong>Description:</strong>&nbsp;${apiMethod.apiNote}</p></div>
+                <%}%>
+                <%if(isNotEmpty(apiMethod.requestHeaderParams)){%>
+                <div class="paragraph"><p><strong>Request-headers:</strong></p></div>
+                <table class="tableblock frame-all grid-all spread">
+                    <colgroup>
+                        <col style="width: 25%;">
+                        <col style="width: 25%;">
+                        <col style="width: 25%;">
+                        <col style="width: 25%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th class="tableblock halign-left valign-top">Header</th>
+                        <th class="tableblock halign-left valign-top">Type</th>
+                        <th class="tableblock halign-left valign-top">Description</th>
+                        <th class="tableblock halign-left valign-top">Required</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%for(header in apiMethod.requestHeaderParams){%>
+                    <tr>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${header.name!}</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${header.simpleType!}</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${header.comment!}</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${header.required!}</p></td>
+                    </tr>
+                    <%}%>
+                    </tbody>
+                </table>
+                <%}%>
+                <%if(isNotEmpty(apiMethod.requestParams)){%>
+                <div class="paragraph"><p><strong>Request-parameters:</strong></p></div>
+                <table class="tableblock frame-all grid-all spread">
+                    <colgroup>
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                        <col style="width: 40%;">
+                        <col style="width: 20%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th class="tableblock halign-left valign-top">Parameter</th>
+                        <th class="tableblock halign-left valign-top">Type</th>
+                        <th class="tableblock halign-left valign-top">Description</th>
+                        <th class="tableblock halign-left valign-top">Required</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%for(param in apiMethod.requestParams){%>
+                    <tr>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${param.name!}</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${param.simpleType!}</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${param.comment!}</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${param.required!}</p></td>
+                    </tr>
+                    <%}%>
+                    </tbody>
+                </table>
+                <%}%>
+                <%if(isNotEmpty(apiMethod.requestExample)){%>
+                <div class="paragraph"><p><strong>Request-example:</strong></p></div>
+                <div class="listingblock">
+                    <div class="content">
+                        <pre>${apiMethod.requestExample}</pre>
+                    </div>
+                </div>
+                <%}%>
+                <%if(isNotEmpty(apiMethod.responseBodyParams)){%>
+                <div class="paragraph"><p><strong>Response-fields:</strong></p></div>
+                <table class="tableblock frame-all grid-all spread">
+                    <colgroup>
+                        <col style="width: 25%;">
+                        <col style="width: 25%;">
+                        <col style="width: 50%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th class="tableblock halign-left valign-top">Field</th>
+                        <th class="tableblock halign-left valign-top">Type</th>
+                        <th class="tableblock halign-left valign-top">Description</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%for(param in apiMethod.responseBodyParams){%>
+                    <tr>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${param.name!}</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${param.simpleType!}</p></td>
+                        <td class="tableblock halign-left valign-top"><p class="tableblock">${param.comment!}</p></td>
+                    </tr>
+                    <%}%>
+                    </tbody>
+                </table>
+                <%}%><%if(isNotEmpty(apiMethod.responseExample)){%>
+                <div class="paragraph"><p><strong>Response-example:</strong></p></div>
+                <div class="listingblock">
+                    <div class="content">
+                        <pre>${apiMethod.responseExample}</pre>
+                    </div>
+                </div>
+                <%}%>
+            </div>
+            <%}%>
+        </div>
+    </div>
+    <%}%>
+
+    <footer class="page-footer"><span class="copyright">Generated by auto-doc</span><span class="footer-modification">
+        Suggestions,contact,support and error reporting to yf231099@alibaba-inc.com</span>
+    </footer>
+</div>
+<script>
+$(function () {
+    var Accordion = function (el, multiple) {
+        this.el = el || {};
+        this.multiple = multiple || false;
+        var links = this.el.find('.dd');
+        links.on('click', {el: this.el, multiple: this.multiple}, this.dropdown);
+    };
+    Accordion.prototype.dropdown = function (e) {
+        var $el = e.data.el;
+        $this = $(this), $next = $this.next();
+        $next.slideToggle();
+        $this.parent().toggleClass('open');
+        if (!e.data.multiple) {
+            $el.find('.submenu').not($next).slideUp("20").parent().removeClass('open');
+        }
+    };
+    new Accordion($('#accordion'), false);
+});
+</script>
+</body>
+</html>
