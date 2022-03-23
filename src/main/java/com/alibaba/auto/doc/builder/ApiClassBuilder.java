@@ -3,7 +3,7 @@ package com.alibaba.auto.doc.builder;
 import java.util.List;
 
 import com.alibaba.auto.doc.model.ApiClass;
-import com.alibaba.auto.doc.model.ApiConfig;
+import com.alibaba.auto.doc.config.ApiConfig;
 import com.alibaba.auto.doc.model.ApiMethod;
 import com.alibaba.auto.doc.utils.JavaClassUtil;
 import com.alibaba.auto.doc.utils.StringUtil;
@@ -22,10 +22,10 @@ public class ApiClassBuilder {
 
         ApiClass apiClass = new ApiClass();
         apiClass.setClassName(javaClass.getName());
-        apiClass.setClassFullName(javaClass.getCanonicalName());
+        apiClass.setClassFullName(javaClass.getGenericFullyQualifiedName());
         apiClass.setAuthor(JavaClassUtil.getClassAuthor(javaClass));
         apiClass.setApiMethodList(apiMethods);
-        apiClass.setDesc(StringUtil.replaceHtmlTag(javaClass.getComment()));
+        apiClass.setDesc(StringUtil.replaceHtmlTag(JavaClassUtil.getClassComment(javaClass)));
         return apiClass;
     }
 }

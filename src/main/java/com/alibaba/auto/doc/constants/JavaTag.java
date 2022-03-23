@@ -19,4 +19,6 @@ public interface JavaTag {
 
     String DEPRECATED = "Deprecated";
 
+    String DESCRIPTION = "description";
+
 }

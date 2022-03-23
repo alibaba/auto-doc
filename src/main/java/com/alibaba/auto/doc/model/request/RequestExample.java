@@ -86,6 +86,6 @@ public class RequestExample {
     }
 
     public String buildCurlString() {
-        return "";
+        return jsonBody;
     }
 }

@@ -63,7 +63,7 @@ public class RequestHeaderHandler {
                     requestParam.setComment(paramCommentMap.get(paramName));
                     requestParam.setType(paramType);
                     requestParam.setLineNumber(javaParameter.getLineNumber());
-                    requestParam.setIsEnum(javaParameter.getJavaClass().isEnum());
+                    requestParam.setEnum(javaParameter.getJavaClass().isEnum());
                     requestHeaderParams.add(requestParam);
                 }
             }

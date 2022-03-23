@@ -29,6 +29,6 @@ public class GlobalFieldCache {
     }
 
     private static String getKey(JavaField javaField) {
-        return javaField.getDeclaringClass().getCanonicalName() + SpecialCharacter.DOT + javaField.getName();
+        return javaField.getDeclaringClass().getGenericFullyQualifiedName() + SpecialCharacter.DOT + javaField.getName();
     }
 }

@@ -9,4 +9,6 @@ public interface AutoDocTag {
 
     String IGNORE = "ignore";
 
+    String REQUIRED = "required";
+
 }

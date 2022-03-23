@@ -1,7 +1,7 @@
 package com.alibaba.auto.doc.model.template;
 
-import com.alibaba.auto.doc.constants.BasicJavaType;
 import com.alibaba.auto.doc.constants.SpecialCharacter;
+import com.alibaba.auto.doc.utils.TypeConvertUtil;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -54,6 +54,9 @@ public class TemplateRequestParam {
     private boolean isEnum;
 
     public String getName() {
+        if(StringUtils.isBlank(name)) {
+            return SpecialCharacter.HTML_SPACE;
+        }
         return name;
     }
 
@@ -62,6 +65,9 @@ public class TemplateRequestParam {
     }
 
     public String getType() {
+        if(StringUtils.isBlank(type)) {
+            return SpecialCharacter.HTML_SPACE;
+        }
         return type;
     }
 
@@ -70,13 +76,7 @@ public class TemplateRequestParam {
     }
 
     public String getSimpleType() {
-        if (BasicJavaType.BASIC_TYPES.contains(this.type)) {
-            int index = type.lastIndexOf(SpecialCharacter.DOT);
-            if (index != -1) {
-                return type.substring(index + 1);
-            }
-        }
-        return type;
+        return TypeConvertUtil.getBasicType(this.type);
     }
 
     public void setSimpleType(String simpleType) {
@@ -104,6 +104,9 @@ public class TemplateRequestParam {
     }
 
     public String getComment() {
+        if(StringUtils.isBlank(comment)) {
+            return SpecialCharacter.HTML_SPACE;
+        }
         if(StringUtils.isNotEmpty(comment) && comment.contains(SpecialCharacter.NEW_LINE)) {
             return comment.replace(SpecialCharacter.NEW_LINE, SpecialCharacter.SPACE);
         }

@@ -5,13 +5,13 @@ package com.alibaba.auto.doc.enums;
  * @date ：Created in 2020/10/29 5:33 下午
  * @description：
  */
-public enum DocLanguage {
+public enum DocLanguageEnum {
     ENGLISH("en-US"),
     CHINESE("zh-CN");
 
     public String code;
 
-    DocLanguage(String code) {
+    DocLanguageEnum(String code) {
         this.code = code;
     }
 

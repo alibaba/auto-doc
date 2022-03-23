@@ -7,6 +7,10 @@ package com.alibaba.auto.doc.constants;
  */
 public interface Constants {
 
+    int INT_TRUE = 1;
+
+    int INT_FLASE = 0;
+
     String METHOD_PREFIX_SET = "set";
 
     String METHOD_PREFIX_GET = "get";
@@ -19,7 +23,9 @@ public interface Constants {
 
     String FILE_SEPARATOR = System.getProperty("file.separator");
 
-    String PROJECT_CODE_PATH = "src" + FILE_SEPARATOR + "main" + FILE_SEPARATOR + "java";
+    String DEFAULT_SOURCE_CODE_PATH = "." + FILE_SEPARATOR;
+
+    String DEFAULT_DOC_OUT_PATH = "target" + FILE_SEPARATOR + "doc";
 
     String DOC_LANGUAGE = "doc_language";
 
@@ -28,12 +34,6 @@ public interface Constants {
     String API_CSS = "API.css";
 
     String API_MARKDOWN = "API.md";
-
-    String JAVA_OBJECT_FULLY = "java.lang.Object";
-
-    String JAVA_LIST_FULLY = "java.util.List";
-
-    String NO_COMMENTS_FOUND = "No comments found.";
 
     String TEMPLATE_API_CLASS_LIST = "templateApiClassList";
 

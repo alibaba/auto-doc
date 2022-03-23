@@ -36,4 +36,9 @@ public interface SpecialCharacter {
     String MARDDOWN_DOLLAR = "\\$";
 
     String DOLLAR = "$";
+
+    String BRACE_LEFT = "{";
+
+    String BRACE_RIGHT = "}";
+
 }

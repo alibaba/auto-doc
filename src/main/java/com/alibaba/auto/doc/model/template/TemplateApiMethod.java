@@ -2,8 +2,6 @@ package com.alibaba.auto.doc.model.template;
 
 import java.util.List;
 
-import com.alibaba.auto.doc.model.request.RequestParam;
-
 /**
  * @author ：杨帆（舲扬）
  * @date ：Created in 2020/11/1 10:06 下午

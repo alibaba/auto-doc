@@ -1,9 +1,11 @@
 package com.alibaba.auto.doc.builder;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.auto.doc.config.ApiConfig;
 import com.alibaba.auto.doc.constants.JavaTag;
 import com.alibaba.auto.doc.constants.SpecialCharacter;
 import com.alibaba.auto.doc.constants.SpringAnnotation;
@@ -12,14 +14,10 @@ import com.alibaba.auto.doc.handler.RequestHeaderHandler;
 import com.alibaba.auto.doc.handler.RequestMappingHandler;
 import com.alibaba.auto.doc.handler.RequestParamHandler;
 import com.alibaba.auto.doc.handler.ResponseBodyHandler;
-import com.alibaba.auto.doc.model.ApiConfig;
 import com.alibaba.auto.doc.model.ApiMethod;
-import com.alibaba.auto.doc.model.request.RequestBodyParam;
-import com.alibaba.auto.doc.model.request.RequestExample;
-import com.alibaba.auto.doc.model.request.RequestMapping;
 import com.alibaba.auto.doc.model.request.RequestParam;
-import com.alibaba.auto.doc.utils.JavaAnnotationUtil;
-import com.alibaba.auto.doc.utils.JavaMethodUtil;
+import com.alibaba.auto.doc.model.request.RequestMapping;
+import com.alibaba.auto.doc.utils.*;
 
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
@@ -42,23 +40,36 @@ public class ApiMethodBuilder {
      * @return
      */
     private static ApiMethod buildApiMethod(final JavaMethod method, ApiConfig apiConfig, String baseUrl) {
-        JavaMethodUtil.checkMethodComment(method, apiConfig.isStrict());
-
         Map<String, String> paramCommentMap = JavaMethodUtil.getParamCommentMap(method, apiConfig.isStrict());
-
         ApiMethod apiMethod = new ApiMethod();
-
         apiMethod.setMethodName(method.getName());
         apiMethod.setMethodSignature(method.getDeclarationSignature(true));
         apiMethod.setMethodId(JavaMethodUtil.buildMethodId(method));
-        apiMethod.setComment(method.getComment());
+        apiMethod.setComment(JavaMethodUtil.getMethodComment(method, apiConfig.isStrict()));
         apiMethod.setLineNumber(method.getLineNumber());
         apiMethod.setApiNote(JavaMethodUtil.getTagValue(method, JavaTag.API_NOTE));
         apiMethod.setAuthor(JavaMethodUtil.getAuthor(method));
         apiMethod.setDeprecated(JavaMethodUtil.isDeprecated(method));
-
         RequestMapping requestMapping = new RequestMappingHandler().handle(baseUrl, method);
-        apiMethod.setUrl(StringUtils.join(requestMapping.getUrls(), SpecialCharacter.COMMA));
+
+        List<String> urls = new LinkedList<>();
+        if (apiConfig.getUrlFirstIfMulti()) {
+            if (apiConfig.getUrlRemoveRegExp()) {
+                urls.add(URLUtil.removeUrlRegExp(requestMapping.getUrls().get(0)));
+            } else {
+                urls.add(requestMapping.getUrls().get(0));
+            }
+        } else {
+            for (String url : requestMapping.getUrls()) {
+                if (apiConfig.getUrlRemoveRegExp()) {
+                    urls.add(URLUtil.removeUrlRegExp(url));
+                } else {
+                    urls.add(url);
+                }
+            }
+        }
+        apiMethod.setUrl(StringUtils.join(urls, SpecialCharacter.COMMA));
+
         apiMethod.setHttpMethod(requestMapping.getMethodType());
 
         apiMethod.setContentType(JavaMethodUtil.getContentType(method));
@@ -69,15 +80,22 @@ public class ApiMethodBuilder {
         List<RequestParam> requestParams = new RequestParamHandler().handle(method, paramCommentMap);
         apiMethod.setRequestParams(requestParams);
 
-        RequestBodyParam requestBodyParam = new RequestBodyHandler().handle(method, paramCommentMap);
-        apiMethod.setRequestBodyParam(requestBodyParam);
+        RequestParam requestBody = new RequestBodyHandler().handle(method, paramCommentMap);
+        apiMethod.setRequestBody(requestBody);
 
-        RequestBodyParam responseBodyParam = new ResponseBodyHandler().handle(method);
-        apiMethod.setResponseBodyParam(responseBodyParam);
+        RequestParam responseBodyParam = new ResponseBodyHandler().handle(method);
+        apiMethod.setResponseBody(responseBodyParam);
+
 
         // TODO
-        apiMethod.setRequestExample(new RequestExample());
-        apiMethod.setResponseExample(null);
+        //RequestExample requestExample = new RequestExample();
+        //
+        //JsonSchema requestBodyJsonSchema = JsonSchemaUtil.buildJsonSchema(requestBody);
+        //requestExample.setJsonBody(StringUtil.replaceHtmlTag(JSON.toJSONString(requestBodyJsonSchema, SerializerFeature.PrettyFormat)));
+        //apiMethod.setRequestExample(requestExample);
+        //
+        //JsonSchema responseBodyJsonSchema = JsonSchemaUtil.buildJsonSchema(responseBodyParam);
+        //apiMethod.setResponseExample(StringUtil.replaceHtmlTag(JSON.toJSONString(responseBodyJsonSchema, SerializerFeature.PrettyFormat)));
 
         return apiMethod;
     }
@@ -94,7 +112,7 @@ public class ApiMethodBuilder {
         String baseUrl = SpecialCharacter.SLASH;
         for (JavaAnnotation annotation : classAnnotations) {
             String annotationName = annotation.getType().getCanonicalName();
-            if (SpringAnnotation.REQUEST_MAPPING_FULLY.equals(annotationName)) {
+            if (SpringAnnotation.REQUEST_MAPPING_FULLY.equals(annotationName) || SpringAnnotation.REQUEST_MAPPING.equals(annotationName)) {
                 baseUrl = JavaAnnotationUtil.getBaseUrl(annotation);
             }
         }
@@ -103,6 +121,9 @@ public class ApiMethodBuilder {
         List<ApiMethod> apiMethodList = new ArrayList<>(methods.size());
 
         for (JavaMethod method : methods) {
+            if (JavaMethodUtil.hasIgnoreTag(method)) {
+                continue;
+            }
             if (JavaMethodUtil.notApiMethod(method)) {
                 continue;
             }

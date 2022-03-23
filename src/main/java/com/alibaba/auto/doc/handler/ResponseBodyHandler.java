@@ -1,6 +1,6 @@
 package com.alibaba.auto.doc.handler;
 
-import com.alibaba.auto.doc.model.request.RequestBodyParam;
+import com.alibaba.auto.doc.model.request.RequestParam;
 import com.alibaba.auto.doc.utils.JavaClassUtil;
 import com.alibaba.auto.doc.utils.JavaMethodUtil;
 
@@ -25,13 +25,22 @@ public class ResponseBodyHandler {
      * @param javaMethod
      * @return
      */
-    public RequestBodyParam handle(final JavaMethod javaMethod) {
+    public RequestParam handle(final JavaMethod javaMethod) {
         JavaClass returnJavaClass = javaMethod.getReturns();
         if (JavaClassUtil.isBasicType(returnJavaClass, false, true)) {
-            RequestBodyParam responseBodyParam = new RequestBodyParam();
+            RequestParam responseBodyParam = new RequestParam();
             responseBodyParam.setType(returnJavaClass.getGenericFullyQualifiedName());
-            responseBodyParam.setIsEnum(returnJavaClass.isEnum());
-            responseBodyParam.setIsCollection(JavaClassUtil.isCollection(returnJavaClass));
+
+            if(returnJavaClass.isEnum()) {
+                responseBodyParam.setEnum(true);
+                responseBodyParam.setEnumType(JavaClassUtil.getEnumType(returnJavaClass));
+            }
+
+            if(JavaClassUtil.isCollection(returnJavaClass)) {
+                responseBodyParam.setCollection(true);
+                responseBodyParam.setCollectionType(JavaClassUtil.getCollectionType(returnJavaClass));
+            }
+
             String methodReturnComment = JavaMethodUtil.getMethodReturnComment(javaMethod);
             if (StringUtils.isNotBlank(methodReturnComment)) {
                 responseBodyParam.setComment(methodReturnComment);

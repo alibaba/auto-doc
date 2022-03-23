@@ -35,6 +35,10 @@ public interface BasicJavaType {
     String BOOLEAN_WRAP = "java.lang.Boolean";
 
     String STRING = "java.lang.String";
+    String STRING_SHORT = "string";
+
+    String DATE = "java.util.Date";
+    String DATE_SHORT = "date";
 
     List<String> BASIC_TYPES = Arrays.asList(
         BYTE, BYTE_WRAP,

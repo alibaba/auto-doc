@@ -9,6 +9,8 @@ public interface SpringAnnotationParam {
 
     String PROP_VALUE = "value";
 
+    String PROP_PATH = "path";
+
     String PROP_DEFAULT_VALUE = "defaultValue";
 
     String PROP_REQUIRED = "required";

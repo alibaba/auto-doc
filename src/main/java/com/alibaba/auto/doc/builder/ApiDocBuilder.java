@@ -1,13 +1,15 @@
 package com.alibaba.auto.doc.builder;
 
+import java.io.File;
 import java.util.List;
 
 import com.alibaba.auto.doc.constants.Constants;
 import com.alibaba.auto.doc.model.ApiClass;
-import com.alibaba.auto.doc.model.ApiConfig;
+import com.alibaba.auto.doc.config.ApiConfig;
 import com.alibaba.auto.doc.model.template.TemplateApiClass;
 import com.alibaba.auto.doc.template.BeetlTemplateUtil;
 import com.alibaba.auto.doc.utils.FileUtil;
+import com.alibaba.fastjson.JSON;
 
 import org.beetl.core.Template;
 import org.slf4j.Logger;
@@ -27,12 +29,20 @@ public class ApiDocBuilder {
      *
      * @param apiConfig
      */
-    public static void build(ApiConfig apiConfig) {
-        long start = System.currentTimeMillis();
+    public static List<ApiClass> build(ApiConfig apiConfig) {
         ProjectBuilder.init(apiConfig);
+
+        log.info("------------------------------------------------------------------------");
+        log.info("Welcome to Auto-Doc");
+        log.info("Source Code Path: {}", new File(apiConfig.getSrcPath()).getAbsolutePath());
+        log.info("Doc out Path: {}", new File(apiConfig.getOutPath()).getAbsolutePath());
+        log.info("------------------------------------------------------------------------");
+
         List<ApiClass> apiClassList = ProjectBuilder.build();
+        log.debug("apiClassList: {}", JSON.toJSONString(apiClassList));
 
         List<TemplateApiClass> templateApiClassList = TemplateApiClassBuilder.build(apiClassList);
+        log.debug("templateApiClassList: {}", JSON.toJSONString(templateApiClassList));
 
         // 1.html
         Template cssTemplate = BeetlTemplateUtil.getByName(Constants.API_CSS);
@@ -48,11 +58,7 @@ public class ApiDocBuilder {
 
         // 3.postman jsons
 
-        long end = System.currentTimeMillis();
-        log.info("------------------------------------------------------------------------");
-        log.info("Auto-Doc Build Success");
-        log.info("Total time : {}s", (end - start) / 1000);
-        log.info("------------------------------------------------------------------------");
+        return apiClassList;
     }
 
 }

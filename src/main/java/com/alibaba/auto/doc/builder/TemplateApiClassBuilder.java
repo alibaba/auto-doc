@@ -7,14 +7,15 @@ import java.util.List;
 import com.alibaba.auto.doc.constants.SpecialCharacter;
 import com.alibaba.auto.doc.model.ApiClass;
 import com.alibaba.auto.doc.model.ApiMethod;
-import com.alibaba.auto.doc.model.request.RequestBodyParam;
 import com.alibaba.auto.doc.model.request.RequestParam;
 import com.alibaba.auto.doc.model.template.TemplateApiClass;
 import com.alibaba.auto.doc.model.template.TemplateApiMethod;
 import com.alibaba.auto.doc.model.template.TemplateRequestParam;
 import com.alibaba.auto.doc.utils.StringUtil;
+import com.alibaba.auto.doc.utils.URLUtil;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author ：杨帆（舲扬）
@@ -73,10 +74,12 @@ public class TemplateApiClassBuilder {
 
             templateApiMethod.setRequestHeaderParams(buildTemplateRequestParams(apiMethod.getRequestHeaderParams()));
             templateApiMethod.setRequestParams(buildTemplateRequestParams(apiMethod.getRequestParams()));
-            templateApiMethod.setRequestBodyParams(buildTemplateRequestParams(buildFlatRequestParams(apiMethod.getRequestBodyParam(), 0)));
-            templateApiMethod.setResponseBodyParams(buildTemplateRequestParams(buildFlatRequestParams(apiMethod.getResponseBodyParam(), 0)));
+            templateApiMethod.setRequestBodyParams(buildTemplateRequestParams(buildFlatRequestParams(apiMethod.getRequestBody(), 0)));
+            templateApiMethod.setResponseBodyParams(buildTemplateRequestParams(buildFlatRequestParams(apiMethod.getResponseBody(), 0)));
 
-            templateApiMethod.setRequestExample(apiMethod.getRequestExample().buildCurlString());
+            if(apiMethod.getRequestExample() != null) {
+                templateApiMethod.setRequestExample(apiMethod.getRequestExample().buildCurlString());
+            }
             templateApiMethod.setResponseExample(apiMethod.getResponseExample());
             templateApiMethod.setOrder(order);
             templateApiMethodList.add(templateApiMethod);
@@ -90,10 +93,10 @@ public class TemplateApiClassBuilder {
      * @param requestBodyParam
      * @return
      */
-    private static List<RequestParam> buildFlatRequestParams(RequestBodyParam requestBodyParam, int deep) {
+    private static List<RequestParam> buildFlatRequestParams(RequestParam requestBodyParam, int deep) {
         List<RequestParam> requestParamList = new LinkedList<>();
 
-        if(requestBodyParam == null) {
+        if (requestBodyParam == null) {
             return requestParamList;
         }
 
@@ -105,12 +108,14 @@ public class TemplateApiClassBuilder {
         requestParam.setRequired(requestBodyParam.getRequired());
         requestParam.setSince(requestBodyParam.getSince());
         requestParam.setLineNumber(requestBodyParam.getLineNumber());
-        requestParam.setIsEnum(requestBodyParam.getIsEnum());
+        requestParam.setEnum(requestBodyParam.getEnum());
+        requestParam.setEnumType(requestBodyParam.getEnumType());
+        requestParam.setCollectionType(requestBodyParam.getCollectionType());
         requestParamList.add(requestParam);
         if (requestBodyParam.getChilds() != null) {
             deep++;
-            for (RequestBodyParam childRequestBodyParam : requestBodyParam.getChilds()) {
-                requestParamList.addAll(buildFlatRequestParams(childRequestBodyParam, deep));
+            for (RequestParam childRequestParam : requestBodyParam.getChilds()) {
+                requestParamList.addAll(buildFlatRequestParams(childRequestParam, deep));
             }
         }
         return requestParamList;
@@ -136,13 +141,20 @@ public class TemplateApiClassBuilder {
         for (RequestParam requestParam : requestParams) {
             TemplateRequestParam templateRequestParam = new TemplateRequestParam();
             templateRequestParam.setName(requestParam.getName());
-            templateRequestParam.setType(requestParam.getType());
+
+            templateRequestParam.setType(StringUtil.replaceHtmlTag(requestParam.getType()));
+            if (requestParam.getEnum()) {
+                if (requestParam.getEnumType() != null && StringUtils.isNotEmpty(requestParam.getEnumType().getType())) {
+                    templateRequestParam.setType(requestParam.getEnumType().getType());
+                }
+            }
+
             templateRequestParam.setDefaultValue(requestParam.getDefaultValue());
-            templateRequestParam.setComment(requestParam.getComment());
+            templateRequestParam.setComment(StringUtil.replaceHtmlTag(requestParam.getComment()));
             templateRequestParam.setRequired(requestParam.getRequired());
             templateRequestParam.setSince(requestParam.getSince());
             templateRequestParam.setLineNumber(requestParam.getLineNumber());
-            templateRequestParam.setEnum(requestParam.isEnum());
+            templateRequestParam.setEnum(requestParam.getEnum());
             templateRequestParams.add(templateRequestParam);
         }
         return templateRequestParams;

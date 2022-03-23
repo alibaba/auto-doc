@@ -4,10 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.alibaba.auto.doc.constants.ContentType;
-import com.alibaba.auto.doc.constants.JavaTag;
-import com.alibaba.auto.doc.constants.SpecialCharacter;
-import com.alibaba.auto.doc.constants.SpringAnnotation;
+import com.alibaba.auto.doc.constants.*;
 import com.alibaba.auto.doc.exception.AutoDocException;
 import com.alibaba.auto.doc.exception.ErrorCodes;
 import com.alibaba.auto.doc.model.comment.NoCommentFound;
@@ -69,7 +66,7 @@ public class JavaMethodUtil {
                 pValue = value.contains(SpecialCharacter.SPACE) ? value.substring(value.indexOf(SpecialCharacter.SPACE) + 1).trim() : SpecialCharacter.BLANK;
             }
             if (StringUtils.isBlank(pValue)) {
-                NoCommentFound noCommentFound = new NoMethodTagCommentFound(javaMethod.getDeclaringClass().getCanonicalName(), tag.getLineNumber(), javaMethod.getName(), tag.getName());
+                NoCommentFound noCommentFound = new NoMethodTagCommentFound(javaMethod.getDeclaringClass().getGenericFullyQualifiedName(), tag.getLineNumber(), javaMethod.getName(), tag.getName());
                 log.warn(noCommentFound.toString());
                 if (isStrict) {
                     throw new AutoDocException(ErrorCodes.AD_MISSING_COMMENT, noCommentFound.toString());
@@ -117,7 +114,7 @@ public class JavaMethodUtil {
      * @return
      */
     public static String buildMethodId(final JavaMethod javaMethod) {
-        String method = javaMethod.getDeclaringClass().getCanonicalName() + SpecialCharacter.COLON + javaMethod.getDeclarationSignature(true);
+        String method = javaMethod.getDeclaringClass().getGenericFullyQualifiedName() + SpecialCharacter.COLON + javaMethod.getDeclarationSignature(true);
         return DigestUtils.md5Hex(method);
     }
 
@@ -127,14 +124,24 @@ public class JavaMethodUtil {
      * @param javaMethod
      * @param isStrict
      */
-    public static void checkMethodComment(final JavaMethod javaMethod, boolean isStrict) {
-        if (StringUtils.isBlank(javaMethod.getComment())) {
-            NoCommentFound noCommentFound = new NoMethodCommentFound(javaMethod.getDeclaringClass().getCanonicalName(), javaMethod.getLineNumber(), javaMethod.getName());
+    public static String getMethodComment(final JavaMethod javaMethod, boolean isStrict) {
+        String comment = javaMethod.getComment();
+        if(StringUtils.contains(comment, "\n")) {
+            // if contains line feed, return the first line if not blank
+            comment = comment.split("\n")[0];
+        }
+        if(comment != null && comment.contains("鉴权")) {
+            System.out.println(comment);
+        }
+
+        if (StringUtils.isBlank(comment)) {
+            NoCommentFound noCommentFound = new NoMethodCommentFound(javaMethod.getDeclaringClass().getGenericFullyQualifiedName(), javaMethod.getLineNumber(), javaMethod.getName());
             log.warn(noCommentFound.toString());
             if (isStrict) {
                 throw new AutoDocException(ErrorCodes.AD_MISSING_COMMENT, noCommentFound.toString());
             }
         }
+        return comment;
     }
 
     /**
@@ -151,6 +158,16 @@ public class JavaMethodUtil {
             }
         }
         return true;
+    }
+
+    /**
+     * check has ignore tag on method
+     * @param javaMethod
+     * @return
+     */
+    public static boolean hasIgnoreTag(final JavaMethod javaMethod) {
+        String tagValue = getTagValue(javaMethod, AutoDocTag.IGNORE);
+        return tagValue != null;
     }
 
     /**

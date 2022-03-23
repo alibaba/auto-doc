@@ -13,6 +13,7 @@ import com.alibaba.auto.doc.exception.AutoDocException;
 import com.alibaba.auto.doc.exception.ErrorCodes;
 import com.alibaba.auto.doc.model.request.RequestParam;
 import com.alibaba.auto.doc.utils.JavaAnnotationUtil;
+import com.alibaba.auto.doc.utils.JavaClassUtil;
 import com.alibaba.auto.doc.utils.JavaFieldUtil;
 import com.alibaba.auto.doc.utils.StringUtil;
 
@@ -73,12 +74,15 @@ public class RequestParamHandler {
         for (JavaField field : fields) {
             RequestParam requestParam = new RequestParam();
             requestParam.setName(field.getName());
-            requestParam.setType(field.getType().getCanonicalName());
+            requestParam.setType(field.getType().getGenericValue());
             if (StringUtils.isNotBlank(field.getComment())) {
                 requestParam.setComment(field.getComment());
             }
             requestParam.setRequired(JavaFieldUtil.isRequired(field));
-            requestParam.setIsEnum(field.getType().isEnum());
+            if(field.getType().isEnum()) {
+                requestParam.setEnum(true);
+                requestParam.setEnumType(JavaClassUtil.getEnumType(field.getType()));
+            }
 
             String since = JavaFieldUtil.getSince(field);
             if (StringUtils.isNotBlank(since)) {
@@ -89,10 +93,10 @@ public class RequestParamHandler {
             defaultValue = StringUtil.removeQuotes(defaultValue);
             if (StringUtils.isNotBlank(defaultValue)) {
                 if(defaultValue.indexOf(SpecialCharacter.JAVA_COMMENT) != -1) {
-                    log.warn("two slashes comment inline with code in " + javaClass.getCanonicalName() + SpecialCharacter.DOT + field.getName() + ", lineNumber: " + field.getLineNumber());
+                    log.warn("two slashes comment inline with code in " + javaClass.getGenericFullyQualifiedName() + SpecialCharacter.DOT + field.getName() + ", lineNumber: " + field.getLineNumber());
                     if(ProjectBuilder.getApiConfig().isStrict()) {
                         throw new AutoDocException(ErrorCodes.AD_TWO_SLASHES_COMMENT_INLINE_WITH_SOURCE_CODE,
-                            "two slashes comment inline with code in " + javaClass.getCanonicalName() + SpecialCharacter.DOT + field.getName() + ", lineNumber: " + field.getLineNumber());
+                            "two slashes comment inline with code in " + javaClass.getGenericFullyQualifiedName() + SpecialCharacter.DOT + field.getName() + ", lineNumber: " + field.getLineNumber());
                     }
                 } else {
                     requestParam.setDefaultValue(defaultValue);
@@ -129,7 +133,15 @@ public class RequestParamHandler {
                 if (StringUtils.isEmpty(requestParam.getComment())) {
                     requestParam.setComment(paramCommentMap.get(parameter.getName()));
                 }
-                requestParam.setIsEnum(parameter.getJavaClass().isEnum());
+                if(parameter.getJavaClass().isEnum()) {
+                    requestParam.setEnum(true);
+                    requestParam.setEnumType(JavaClassUtil.getEnumType(parameter.getJavaClass()));
+                }
+                if(JavaClassUtil.isCollection(parameter.getJavaClass())) {
+                    requestParam.setCollection(true);
+                    requestParam.setCollectionType(JavaClassUtil.getCollectionType(parameter.getJavaClass()));
+                }
+
                 requestParam.setLineNumber(parameter.getLineNumber());
                 params.add(requestParam);
             } else {
@@ -137,11 +149,19 @@ public class RequestParamHandler {
                     if (JavaFieldUtil.getFields(parameter.getJavaClass(), null, true, false).size() == 0) {
                         RequestParam requestParam = new RequestParam();
                         requestParam.setName(parameter.getName());
-                        requestParam.setType(parameter.getJavaClass().getCanonicalName());
+                        requestParam.setType(parameter.getJavaClass().getGenericValue());
                         if (StringUtils.isNotBlank(paramCommentMap.get(parameter.getName()))) {
                             requestParam.setComment(paramCommentMap.get(parameter.getName()));
                         }
-                        requestParam.setIsEnum(parameter.getJavaClass().isEnum());
+
+                        if(parameter.getJavaClass().isEnum()) {
+                            requestParam.setEnum(true);
+                            requestParam.setEnumType(JavaClassUtil.getEnumType(parameter.getJavaClass()));
+                        }
+                        if(JavaClassUtil.isCollection(parameter.getJavaClass())) {
+                            requestParam.setCollection(true);
+                            requestParam.setCollectionType(JavaClassUtil.getCollectionType(parameter.getJavaClass()));
+                        }
                         requestParam.setLineNumber(parameter.getLineNumber());
                         params.add(requestParam);
                     } else {
@@ -163,11 +183,11 @@ public class RequestParamHandler {
     }
 
     private boolean isRequestParam(final JavaParameter parameter) {
-        if (JavaAnnotationUtil.isMatch(parameter.getAnnotations(), SpringAnnotation.REQUEST_BODY_FULLY, SpringAnnotation.REQUEST_HEADER_FULLY)) {
+        if (JavaAnnotationUtil.isMatch(parameter.getAnnotations(), SpringAnnotation.REQUEST_BODY_FULLY, SpringAnnotation.REQUEST_BODY, SpringAnnotation.REQUEST_HEADER_FULLY, SpringAnnotation.REQUEST_HEADER)) {
             return false;
         }
         for (String nonCustomRequestParamPackage : NonCustomPackage.NON_CUSTOM_REQUEST_PARAM_PACKAGES) {
-            if (parameter.getJavaClass().getCanonicalName().startsWith(nonCustomRequestParamPackage)) {
+            if (parameter.getJavaClass().getGenericFullyQualifiedName().startsWith(nonCustomRequestParamPackage)) {
                 return false;
             }
         }

@@ -21,21 +21,33 @@
 <%}%>
 
 <%if(isNotEmpty(apiMethod.requestHeaderParams)){%>
-**Request-headers:**
+**Headers:**
+
 Header|Type|Description|Required
 ---|---|---|---
 <%for(param in apiMethod.requestHeaderParams){%>
-${param.name}|${param.markdownSimpleType}|${param.comment}|${param.required}
+${param.name!}|${param.markdownSimpleType!}|${param.comment!}|${param.required!}
 <%}%>
 <%}%>
 
 
 <%if(isNotEmpty(apiMethod.requestParams)){%>
 **Request-parameters:**
+
 Parameter|Type|Description|Required
 ---|---|---|---
 <%for(param in apiMethod.requestParams){%>
-${param.name}|${param.markdownSimpleType}|${param.comment}|${param.required}
+${param.name!}|${param.markdownSimpleType!}|${param.comment!}|${param.required!}
+<%}%>
+<%}%>
+
+<%if(isNotEmpty(apiMethod.requestBodyParams)){%>
+**Request-body:**
+
+Parameter|Type|Description|Required
+---|---|---|---
+<%for(param in apiMethod.requestBodyParams){%>
+${param.name!}|${param.markdownSimpleType!}|${param.comment!}|${param.required!}
 <%}%>
 <%}%>
 
@@ -47,18 +59,19 @@ ${apiMethod.requestExample}
 <%}%>
 
 <%if(isNotEmpty(apiMethod.responseBodyParams)){%>
-**Response-fields:**
+**Response:**
+
 Field|Type|Description
 ---|---|---
 <%for(param in apiMethod.responseBodyParams){%>
-${param.name}|${param.markdownSimpleType}|${param.comment}
+${param.name!}|${param.markdownSimpleType!}|${param.comment!}
 <%}%>
 <%}%>
 
 <%if(isNotEmpty(apiMethod.responseExample)){%>
 **Response-example:**
 ```
-${doc.responseExample}
+${apiMethod.responseExample}
 ```
 <%}%>
 

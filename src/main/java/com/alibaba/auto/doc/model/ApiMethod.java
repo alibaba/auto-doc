@@ -3,9 +3,8 @@ package com.alibaba.auto.doc.model;
 import java.io.Serializable;
 import java.util.List;
 
-import com.alibaba.auto.doc.model.request.RequestBodyParam;
-import com.alibaba.auto.doc.model.request.RequestExample;
 import com.alibaba.auto.doc.model.request.RequestParam;
+import com.alibaba.auto.doc.model.request.RequestExample;
 
 /**
  * @author ：杨帆（舲扬）
@@ -82,12 +81,12 @@ public class ApiMethod implements Serializable {
     /**
      * http request body
      */
-    private RequestBodyParam requestBodyParam;
+    private RequestParam requestBody;
 
     /**
      * response param
      */
-    private RequestBodyParam responseBodyParam;
+    private RequestParam responseBody;
 
     /**
      * request example
@@ -203,20 +202,20 @@ public class ApiMethod implements Serializable {
         this.requestParams = requestParams;
     }
 
-    public RequestBodyParam getRequestBodyParam() {
-        return requestBodyParam;
+    public RequestParam getRequestBody() {
+        return requestBody;
     }
 
-    public void setRequestBodyParam(RequestBodyParam requestBodyParam) {
-        this.requestBodyParam = requestBodyParam;
+    public void setRequestBody(RequestParam requestBody) {
+        this.requestBody = requestBody;
     }
 
-    public RequestBodyParam getResponseBodyParam() {
-        return responseBodyParam;
+    public RequestParam getResponseBody() {
+        return responseBody;
     }
 
-    public void setResponseBodyParam(RequestBodyParam responseBodyParam) {
-        this.responseBodyParam = responseBodyParam;
+    public void setResponseBody(RequestParam responseBody) {
+        this.responseBody = responseBody;
     }
 
     public RequestExample getRequestExample() {

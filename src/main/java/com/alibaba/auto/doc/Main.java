@@ -1,7 +1,10 @@
 package com.alibaba.auto.doc;
 
 import com.alibaba.auto.doc.builder.ApiDocBuilder;
-import com.alibaba.auto.doc.model.ApiConfig;
+import com.alibaba.auto.doc.config.ApiConfig;
+import com.alibaba.auto.doc.model.ApiClass;
+
+import java.util.List;
 
 /**
  * @author ：杨帆（舲扬）
@@ -12,9 +15,8 @@ public class Main {
 
     public static void main(String[] args) {
         ApiConfig config = new ApiConfig();
-        config.setSrcPath("/Users/yangfan/code/aliyun-web-sample");
-        config.setSrcPath("/Users/yangfan/code/dtboost-otm");
+        config.setSrcPath("/Users/yangfan/code/dataq/dataq-adam");
         config.setOutPath("/Users/yangfan/Desktop/docTest");
-        ApiDocBuilder.build(config);
+        List<ApiClass> build = ApiDocBuilder.build(config);
     }
 }

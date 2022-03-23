@@ -20,6 +20,9 @@ public class JsonSchema {
 
     private String type;
 
+    @JSONField(name = "enum")
+    private List<Object> enums;
+
     private String title;
 
     private String description;
@@ -33,7 +36,7 @@ public class JsonSchema {
 
     private Map<String, JsonSchema> properties;
 
-    private JsonSchemaItems items;
+    private JsonSchema items;
 
     public String getSchema() {
         return schema;
@@ -57,6 +60,14 @@ public class JsonSchema {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public List<Object> getEnums() {
+        return enums;
+    }
+
+    public void setEnums(List<Object> enums) {
+        this.enums = enums;
     }
 
     public String getTitle() {
@@ -107,11 +118,11 @@ public class JsonSchema {
         this.properties = properties;
     }
 
-    public JsonSchemaItems getItems() {
+    public JsonSchema getItems() {
         return items;
     }
 
-    public void setItems(JsonSchemaItems items) {
+    public void setItems(JsonSchema items) {
         this.items = items;
     }
 }

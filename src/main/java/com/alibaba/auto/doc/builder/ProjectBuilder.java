@@ -8,17 +8,19 @@ import java.util.List;
 
 import com.alibaba.auto.doc.cache.GlobalFieldCache;
 import com.alibaba.auto.doc.constants.Constants;
-import com.alibaba.auto.doc.enums.DocLanguage;
+import com.alibaba.auto.doc.enums.DocLanguageEnum;
 import com.alibaba.auto.doc.exception.AutoDocException;
 import com.alibaba.auto.doc.exception.ErrorCodes;
 import com.alibaba.auto.doc.model.ApiClass;
-import com.alibaba.auto.doc.model.ApiConfig;
+import com.alibaba.auto.doc.config.ApiConfig;
 import com.alibaba.auto.doc.model.ApiMethod;
 import com.alibaba.auto.doc.utils.JavaClassUtil;
 
 import com.thoughtworks.qdox.JavaProjectBuilder;
 import com.thoughtworks.qdox.model.JavaClass;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author ：杨帆（舲扬）
@@ -26,6 +28,8 @@ import org.apache.commons.lang3.StringUtils;
  * @description：
  */
 public class ProjectBuilder {
+
+    private static final Logger log = LoggerFactory.getLogger(ProjectBuilder.class);
 
     private static JavaProjectBuilder javaProjectBuilder;
 
@@ -49,13 +53,13 @@ public class ProjectBuilder {
         if (null != apiConfig.getLanguage()) {
             System.setProperty(Constants.DOC_LANGUAGE, apiConfig.getLanguage().getCode());
         } else {
-            apiConfig.setLanguage(DocLanguage.CHINESE);
-            System.setProperty(Constants.DOC_LANGUAGE, DocLanguage.CHINESE.getCode());
+            apiConfig.setLanguage(DocLanguageEnum.CHINESE);
+            System.setProperty(Constants.DOC_LANGUAGE, DocLanguageEnum.CHINESE.getCode());
         }
 
         // 3.source path check
         if (StringUtils.isBlank(apiConfig.getSrcPath())) {
-            apiConfig.setSrcPath(Constants.PROJECT_CODE_PATH);
+            apiConfig.setSrcPath(Constants.DEFAULT_SOURCE_CODE_PATH);
         }
         File file = new File(apiConfig.getSrcPath());
         if (file.exists() && file.isDirectory()) {
@@ -74,7 +78,6 @@ public class ProjectBuilder {
 
         // 6.remove cache
         GlobalFieldCache.empty();
-
     }
 
     /**
@@ -89,6 +92,9 @@ public class ProjectBuilder {
 
         for (JavaClass javaClass : javaClasses) {
             if (JavaClassUtil.ignoreClass(javaClass)) {
+                continue;
+            }
+            if(!JavaClassUtil.isInclude(javaClass, apiConfig.getPackageInclude(), apiConfig.getClassInclude(), apiConfig.getClassExclude())) {
                 continue;
             }
             List<ApiMethod> apiMethods = ApiMethodBuilder.buildApiMethods(javaClass, apiConfig);

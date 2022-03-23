@@ -1,13 +1,8 @@
 package com.alibaba.auto.doc.utils;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
-import com.alibaba.auto.doc.constants.Constants;
-import com.alibaba.auto.doc.constants.JavaTag;
-import com.alibaba.auto.doc.constants.SpecialCharacter;
-import com.alibaba.auto.doc.constants.ValidateAnnotations;
+import com.alibaba.auto.doc.constants.*;
 
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaClass;
@@ -26,35 +21,36 @@ public class JavaFieldUtil {
      * get class field with set and get
      *
      * @param javaClass
-     * @param setMethodList
+     * @param setGetMethods
      * @return
      */
-    public static List<JavaField> getFields(final JavaClass javaClass, List<String> setMethodList, boolean checkSetMethod, boolean checkGetMethod) {
+    public static List<JavaField> getFields(final JavaClass javaClass, Set<String> setGetMethods, boolean checkSetMethod, boolean checkGetMethod) {
         List<JavaField> fieldList = new ArrayList<>();
-        if (setMethodList == null) {
-            setMethodList = new ArrayList<String>();
-        }
-        if (javaClass.getFields() == null || javaClass.getFields().size() < 1) {
-            return fieldList;
+        if (setGetMethods == null) {
+            setGetMethods = new HashSet<String>();
         }
         for (JavaMethod method : javaClass.getMethods()) {
             if (method.getModifiers().contains(Constants.MODIFIED_PUBLIC)) {
                 if (method.getName().startsWith(Constants.METHOD_PREFIX_SET)) {
                     if (method.getParameters().size() == 1) {
-                        setMethodList.add(method.getName());
+                        setGetMethods.add(method.getName());
                     }
                 }
                 if (method.getName().startsWith(Constants.METHOD_PREFIX_GET)) {
                     if (method.getParameters().size() == 0) {
-                        setMethodList.add(method.getName());
+                        setGetMethods.add(method.getName());
                     }
                 }
             }
         }
 
-        fieldList.addAll(fieldExclude(javaClass.getFields(), setMethodList, checkSetMethod, checkGetMethod));
-        if (JavaClassUtil.isCustomClass(javaClass.getSuperJavaClass())) {
-            fieldList.addAll(getFields(javaClass.getSuperJavaClass(), setMethodList, checkSetMethod, checkGetMethod));
+        // 获取有效属性（非静态、有set/get方法）
+        fieldList.addAll(getRealParamField(javaClass.getFields(), setGetMethods, checkSetMethod, checkGetMethod));
+
+        // 获取父类属性
+        JavaClass superJavaClass = javaClass.getSuperJavaClass();
+        if (superJavaClass != null && JavaClassUtil.isCustomClass(superJavaClass)) {
+            fieldList.addAll(getFields(javaClass.getSuperJavaClass(), setGetMethods, checkSetMethod, checkGetMethod));
         }
         return fieldList;
     }
@@ -63,22 +59,22 @@ public class JavaFieldUtil {
      * field exclude
      *
      * @param fieldList
-     * @param setMethodList
+     * @param setGetMethods
      * @return
      */
-    private static List<JavaField> fieldExclude(List<JavaField> fieldList, List<String> setMethodList, boolean checkSetMethod, boolean checkGetMethod) {
+    private static List<JavaField> getRealParamField(List<JavaField> fieldList, Set<String> setGetMethods, boolean checkSetMethod, boolean checkGetMethod) {
         List<JavaField> list = new LinkedList<>();
         for (JavaField field : fieldList) {
             if (!(field.isFinal() || field.isStatic())) {
                 if (checkSetMethod) {
                     String setMethodName = Constants.METHOD_PREFIX_SET + StringUtil.firstToUpperCase(field.getName());
-                    if (setMethodList.contains(setMethodName)) {
+                    if (setGetMethods.contains(setMethodName)) {
                         list.add(field);
                     }
                 }
                 if (checkGetMethod) {
                     String getMethodName = Constants.METHOD_PREFIX_GET + StringUtil.firstToUpperCase(field.getName());
-                    if (setMethodList.contains(getMethodName)) {
+                    if (setGetMethods.contains(getMethodName)) {
                         list.add(field);
                     }
                 }
@@ -109,6 +105,6 @@ public class JavaFieldUtil {
      * @return
      */
     public static Boolean isRequired(final JavaField javaField) {
-        return JavaAnnotationUtil.isMatch(javaField.getAnnotations(), ValidateAnnotations.NOT_NULL, ValidateAnnotations.NOT_BLANK) ? true : null;
+        return (javaField.getTagByName(AutoDocTag.REQUIRED) != null || JavaAnnotationUtil.isMatch(javaField.getAnnotations(), ValidateAnnotations.NOT_NULL, ValidateAnnotations.NOT_BLANK)) ? true : null;
     }
 }

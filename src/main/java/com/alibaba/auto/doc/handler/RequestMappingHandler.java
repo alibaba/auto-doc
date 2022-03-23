@@ -32,21 +32,24 @@ public class RequestMappingHandler {
         List<JavaAnnotation> annotations = method.getAnnotations();
         for (JavaAnnotation annotation : annotations) {
             String annotationName = annotation.getType().getCanonicalName();
+            String[] arr = annotationName.split("\\.");
+            annotationName = arr[arr.length - 1];
+
             if (SpringAnnotation.REQUEST_MAPPINGS.contains(annotationName)) {
                 urls = JavaAnnotationUtil.getApiUrls(annotation, baseUrl);
             }
 
-            if (SpringAnnotation.REQUEST_MAPPING_FULLY.equals(annotationName)) {
+            if (SpringAnnotation.REQUEST_MAPPING.equals(annotationName)) {
                 methodType = JavaAnnotationUtil.getHttpMethods(annotation, method);
-            } else if (SpringAnnotation.GET_MAPPING_FULLY.equals(annotationName)) {
+            } else if (SpringAnnotation.GET_MAPPING.equals(annotationName)) {
                 methodType = HttpMethodEnum.GET.getValue();
-            } else if (SpringAnnotation.POST_MAPPING_FULLY.equals(annotationName)) {
+            } else if (SpringAnnotation.POST_MAPPING.equals(annotationName)) {
                 methodType = HttpMethodEnum.POST.getValue();
-            } else if (SpringAnnotation.PUT_MAPPING_FULLY.equals(annotationName)) {
+            } else if (SpringAnnotation.PUT_MAPPING.equals(annotationName)) {
                 methodType = HttpMethodEnum.PUT.getValue();
-            } else if (SpringAnnotation.PATCH_MAPPING_FULLY.equals(annotationName)) {
+            } else if (SpringAnnotation.PATCH_MAPPING.equals(annotationName)) {
                 methodType = HttpMethodEnum.PATCH.getValue();
-            } else if (SpringAnnotation.DELETE_MAPPING_FULLY.equals(annotationName)) {
+            } else if (SpringAnnotation.DELETE_MAPPING.equals(annotationName)) {
                 methodType = HttpMethodEnum.DELETE.getValue();
             }
         }
