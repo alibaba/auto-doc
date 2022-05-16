@@ -15,12 +15,11 @@
  */
 package com.alibaba.auto.doc.cache;
 
+import com.alibaba.auto.doc.constants.SpecialCharacter;
+import com.thoughtworks.qdox.model.JavaField;
+
 import java.util.HashSet;
 import java.util.Set;
-
-import com.alibaba.auto.doc.constants.SpecialCharacter;
-
-import com.thoughtworks.qdox.model.JavaField;
 
 /**
  * @author ：杨帆（舲扬）

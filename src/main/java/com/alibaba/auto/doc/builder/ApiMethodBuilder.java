@@ -15,29 +15,26 @@
  */
 package com.alibaba.auto.doc.builder;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 import com.alibaba.auto.doc.config.ApiConfig;
 import com.alibaba.auto.doc.constants.JavaTag;
 import com.alibaba.auto.doc.constants.SpecialCharacter;
 import com.alibaba.auto.doc.constants.SpringAnnotation;
-import com.alibaba.auto.doc.handler.RequestBodyHandler;
-import com.alibaba.auto.doc.handler.RequestHeaderHandler;
-import com.alibaba.auto.doc.handler.RequestMappingHandler;
-import com.alibaba.auto.doc.handler.RequestParamHandler;
-import com.alibaba.auto.doc.handler.ResponseBodyHandler;
+import com.alibaba.auto.doc.handler.*;
 import com.alibaba.auto.doc.model.ApiMethod;
-import com.alibaba.auto.doc.model.request.RequestParam;
 import com.alibaba.auto.doc.model.request.RequestMapping;
-import com.alibaba.auto.doc.utils.*;
-
+import com.alibaba.auto.doc.model.request.RequestParam;
+import com.alibaba.auto.doc.utils.JavaAnnotationUtil;
+import com.alibaba.auto.doc.utils.JavaMethodUtil;
+import com.alibaba.auto.doc.utils.URLUtil;
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author ：杨帆（舲扬）
@@ -136,8 +133,10 @@ public class ApiMethodBuilder {
         List<ApiMethod> apiMethodList = new ArrayList<>(methods.size());
 
         for (JavaMethod method : methods) {
-            if (JavaMethodUtil.hasIgnoreTag(method)) {
-                continue;
+            if(!apiConfig.getIgnoreAutoDocTag()) {
+                if (JavaMethodUtil.hasIgnoreTag(method)) {
+                    continue;
+                }
             }
             if (JavaMethodUtil.notApiMethod(method)) {
                 continue;

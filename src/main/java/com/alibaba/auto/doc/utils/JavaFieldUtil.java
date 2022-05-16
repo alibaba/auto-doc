@@ -15,15 +15,14 @@
  */
 package com.alibaba.auto.doc.utils;
 
-import java.util.*;
-
 import com.alibaba.auto.doc.constants.*;
-
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.*;
 
 /**
  * @author ：杨帆（舲扬）

@@ -15,34 +15,23 @@
  */
 package com.alibaba.auto.doc.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.alibaba.auto.doc.builder.ProjectBuilder;
-import com.alibaba.auto.doc.constants.AutoDocTag;
-import com.alibaba.auto.doc.constants.BasicJavaType;
-import com.alibaba.auto.doc.constants.Constants;
-import com.alibaba.auto.doc.constants.JavaTag;
-import com.alibaba.auto.doc.constants.NonCustomPackage;
-import com.alibaba.auto.doc.constants.SpecialCharacter;
-import com.alibaba.auto.doc.constants.SpringAnnotation;
+import com.alibaba.auto.doc.constants.*;
 import com.alibaba.auto.doc.exception.AutoDocException;
 import com.alibaba.auto.doc.exception.ErrorCodes;
 import com.alibaba.auto.doc.model.comment.NoClassCommentFound;
 import com.alibaba.auto.doc.model.comment.NoCommentFound;
 import com.alibaba.auto.doc.model.request.CollectionType;
 import com.alibaba.auto.doc.model.request.EnumType;
-
-import com.thoughtworks.qdox.model.DocletTag;
-import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaField;
-import com.thoughtworks.qdox.model.JavaParameter;
-import com.thoughtworks.qdox.model.JavaType;
+import com.thoughtworks.qdox.model.*;
 import com.thoughtworks.qdox.model.expression.Expression;
 import com.thoughtworks.qdox.model.impl.DefaultJavaParameterizedType;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Handle JavaClass
@@ -227,9 +216,11 @@ public class JavaClassUtil {
      * @param javaClass
      * @return
      */
-    public static boolean ignoreClass(final JavaClass javaClass) {
-        if (hasIgnoreTag(javaClass)) {
-            return true;
+    public static boolean ignoreClass(final JavaClass javaClass, final boolean ignoreAutoDocTag) {
+        if(!ignoreAutoDocTag) {
+            if (hasIgnoreTag(javaClass)) {
+                return true;
+            }
         }
         if (!isSpringController(javaClass)) {
             return true;

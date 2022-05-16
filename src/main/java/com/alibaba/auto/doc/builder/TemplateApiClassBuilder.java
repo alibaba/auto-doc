@@ -15,10 +15,6 @@
  */
 package com.alibaba.auto.doc.builder;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
 import com.alibaba.auto.doc.constants.SpecialCharacter;
 import com.alibaba.auto.doc.model.ApiClass;
 import com.alibaba.auto.doc.model.ApiMethod;
@@ -27,10 +23,12 @@ import com.alibaba.auto.doc.model.template.TemplateApiClass;
 import com.alibaba.auto.doc.model.template.TemplateApiMethod;
 import com.alibaba.auto.doc.model.template.TemplateRequestParam;
 import com.alibaba.auto.doc.utils.StringUtil;
-import com.alibaba.auto.doc.utils.URLUtil;
-
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author ：杨帆（舲扬）

@@ -15,11 +15,11 @@
  */
 package com.alibaba.auto.doc.model;
 
+import com.alibaba.auto.doc.model.request.RequestExample;
+import com.alibaba.auto.doc.model.request.RequestParam;
+
 import java.io.Serializable;
 import java.util.List;
-
-import com.alibaba.auto.doc.model.request.RequestParam;
-import com.alibaba.auto.doc.model.request.RequestExample;
 
 /**
  * @author ：杨帆（舲扬）

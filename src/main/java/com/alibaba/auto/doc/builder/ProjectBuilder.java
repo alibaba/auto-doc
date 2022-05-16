@@ -15,27 +15,26 @@
  */
 package com.alibaba.auto.doc.builder;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
 import com.alibaba.auto.doc.cache.GlobalFieldCache;
+import com.alibaba.auto.doc.config.ApiConfig;
 import com.alibaba.auto.doc.constants.Constants;
 import com.alibaba.auto.doc.enums.DocLanguageEnum;
 import com.alibaba.auto.doc.exception.AutoDocException;
 import com.alibaba.auto.doc.exception.ErrorCodes;
 import com.alibaba.auto.doc.model.ApiClass;
-import com.alibaba.auto.doc.config.ApiConfig;
 import com.alibaba.auto.doc.model.ApiMethod;
 import com.alibaba.auto.doc.utils.JavaClassUtil;
-
 import com.thoughtworks.qdox.JavaProjectBuilder;
 import com.thoughtworks.qdox.model.JavaClass;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author ：杨帆（舲扬）
@@ -106,7 +105,7 @@ public class ProjectBuilder {
         Collection<JavaClass> javaClasses = ProjectBuilder.getJavaProjectBuilder().getClasses();
 
         for (JavaClass javaClass : javaClasses) {
-            if (JavaClassUtil.ignoreClass(javaClass)) {
+            if (JavaClassUtil.ignoreClass(javaClass, apiConfig.getIgnoreAutoDocTag())) {
                 continue;
             }
             if(!JavaClassUtil.isInclude(javaClass, apiConfig.getPackageInclude(), apiConfig.getClassInclude(), apiConfig.getClassExclude())) {

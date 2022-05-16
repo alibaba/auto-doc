@@ -15,10 +15,10 @@
  */
 package com.alibaba.auto.doc.utils;
 
+import com.alibaba.auto.doc.constants.SpecialCharacter;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.alibaba.auto.doc.constants.SpecialCharacter;
 
 /**
  * @author ：杨帆（舲扬）

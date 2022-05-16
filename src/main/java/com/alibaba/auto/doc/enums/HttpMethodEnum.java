@@ -15,9 +15,9 @@
  */
 package com.alibaba.auto.doc.enums;
 
-import java.util.Arrays;
-
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Arrays;
 
 /**
  * @author ：杨帆（舲扬）

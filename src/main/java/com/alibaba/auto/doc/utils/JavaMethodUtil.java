@@ -15,17 +15,12 @@
  */
 package com.alibaba.auto.doc.utils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.alibaba.auto.doc.constants.*;
 import com.alibaba.auto.doc.exception.AutoDocException;
 import com.alibaba.auto.doc.exception.ErrorCodes;
 import com.alibaba.auto.doc.model.comment.NoCommentFound;
 import com.alibaba.auto.doc.model.comment.NoMethodCommentFound;
 import com.alibaba.auto.doc.model.comment.NoMethodTagCommentFound;
-
 import com.thoughtworks.qdox.model.DocletTag;
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaMethod;
@@ -34,6 +29,10 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author ：杨帆（舲扬）

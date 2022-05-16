@@ -15,20 +15,19 @@
  */
 package com.alibaba.auto.doc.utils;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
 import com.alibaba.auto.doc.constants.SpecialCharacter;
 import com.alibaba.auto.doc.constants.SpringAnnotation;
 import com.alibaba.auto.doc.constants.SpringAnnotationParam;
 import com.alibaba.auto.doc.enums.HttpMethodEnum;
-
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author ：杨帆（舲扬）

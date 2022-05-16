@@ -15,10 +15,10 @@
  */
 package com.alibaba.auto.doc.model.json;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.util.List;
 import java.util.Map;
-
-import com.alibaba.fastjson.annotation.JSONField;
 
 /**
  * @author ：杨帆（舲扬）

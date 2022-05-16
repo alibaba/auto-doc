@@ -15,15 +15,14 @@
  */
 package com.alibaba.auto.doc.handler;
 
-import java.util.List;
-
 import com.alibaba.auto.doc.constants.SpringAnnotation;
 import com.alibaba.auto.doc.enums.HttpMethodEnum;
 import com.alibaba.auto.doc.model.request.RequestMapping;
 import com.alibaba.auto.doc.utils.JavaAnnotationUtil;
-
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaMethod;
+
+import java.util.List;
 
 /**
  * @author ：杨帆（舲扬）

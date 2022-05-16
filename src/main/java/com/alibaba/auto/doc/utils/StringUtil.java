@@ -16,7 +16,6 @@
 package com.alibaba.auto.doc.utils;
 
 import com.alibaba.auto.doc.constants.SpecialCharacter;
-
 import org.apache.commons.lang3.StringUtils;
 
 /**

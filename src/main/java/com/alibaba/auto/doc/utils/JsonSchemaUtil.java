@@ -15,16 +15,15 @@
  */
 package com.alibaba.auto.doc.utils;
 
+import com.alibaba.auto.doc.enums.JsonSchemaTypeEnum;
+import com.alibaba.auto.doc.model.json.JsonSchema;
+import com.alibaba.auto.doc.model.request.RequestParam;
+import org.apache.commons.lang3.BooleanUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.alibaba.auto.doc.enums.JsonSchemaTypeEnum;
-import com.alibaba.auto.doc.model.json.JsonSchema;
-import com.alibaba.auto.doc.model.request.RequestParam;
-
-import org.apache.commons.lang3.BooleanUtils;
 
 /**
  * @author ：杨帆（舲扬）

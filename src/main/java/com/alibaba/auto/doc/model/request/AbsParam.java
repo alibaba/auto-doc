@@ -15,9 +15,9 @@
  */
 package com.alibaba.auto.doc.model.request;
 
-import java.io.Serializable;
-
 import com.alibaba.auto.doc.constants.SpecialCharacter;
+
+import java.io.Serializable;
 
 /**
  * @author ：杨帆（舲扬）

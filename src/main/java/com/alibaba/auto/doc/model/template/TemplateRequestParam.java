@@ -17,7 +17,6 @@ package com.alibaba.auto.doc.model.template;
 
 import com.alibaba.auto.doc.constants.SpecialCharacter;
 import com.alibaba.auto.doc.utils.TypeConvertUtil;
-
 import org.apache.commons.lang3.StringUtils;
 
 /**

@@ -15,15 +15,14 @@
  */
 package com.alibaba.auto.doc.builder;
 
-import java.util.List;
-
-import com.alibaba.auto.doc.model.ApiClass;
 import com.alibaba.auto.doc.config.ApiConfig;
+import com.alibaba.auto.doc.model.ApiClass;
 import com.alibaba.auto.doc.model.ApiMethod;
 import com.alibaba.auto.doc.utils.JavaClassUtil;
 import com.alibaba.auto.doc.utils.StringUtil;
-
 import com.thoughtworks.qdox.model.JavaClass;
+
+import java.util.List;
 
 /**
  * @author ：杨帆（舲扬）

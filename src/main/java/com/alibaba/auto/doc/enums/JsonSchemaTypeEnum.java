@@ -16,7 +16,6 @@
 package com.alibaba.auto.doc.enums;
 
 import com.alibaba.auto.doc.model.request.RequestParam;
-
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 

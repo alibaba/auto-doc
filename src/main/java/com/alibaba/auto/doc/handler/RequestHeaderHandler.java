@@ -15,20 +15,19 @@
  */
 package com.alibaba.auto.doc.handler;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import com.alibaba.auto.doc.constants.SpringAnnotation;
 import com.alibaba.auto.doc.constants.SpringAnnotationParam;
 import com.alibaba.auto.doc.model.request.RequestParam;
 import com.alibaba.auto.doc.utils.JavaAnnotationUtil;
 import com.alibaba.auto.doc.utils.StringUtil;
-
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaParameter;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author ：杨帆（舲扬）

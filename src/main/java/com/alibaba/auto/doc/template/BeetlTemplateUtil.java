@@ -15,15 +15,14 @@
  */
 package com.alibaba.auto.doc.template;
 
-import java.io.IOException;
-
 import com.alibaba.auto.doc.exception.AutoDocException;
 import com.alibaba.auto.doc.exception.ErrorCodes;
-
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
 import org.beetl.core.Template;
 import org.beetl.core.resource.ClasspathResourceLoader;
+
+import java.io.IOException;
 
 /**
  * @author ：杨帆（舲扬）

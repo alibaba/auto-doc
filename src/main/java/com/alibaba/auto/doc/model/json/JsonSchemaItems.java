@@ -15,9 +15,9 @@
  */
 package com.alibaba.auto.doc.model.json;
 
-import java.util.List;
-
 import com.alibaba.fastjson.annotation.JSONField;
+
+import java.util.List;
 
 /**
  * @author ：杨帆（舲扬）

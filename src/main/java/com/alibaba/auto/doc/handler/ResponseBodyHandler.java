@@ -18,7 +18,6 @@ package com.alibaba.auto.doc.handler;
 import com.alibaba.auto.doc.model.request.RequestParam;
 import com.alibaba.auto.doc.utils.JavaClassUtil;
 import com.alibaba.auto.doc.utils.JavaMethodUtil;
-
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import org.apache.commons.lang3.StringUtils;

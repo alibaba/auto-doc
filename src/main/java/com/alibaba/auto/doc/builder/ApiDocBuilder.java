@@ -15,20 +15,19 @@
  */
 package com.alibaba.auto.doc.builder;
 
-import java.io.File;
-import java.util.List;
-
+import com.alibaba.auto.doc.config.ApiConfig;
 import com.alibaba.auto.doc.constants.Constants;
 import com.alibaba.auto.doc.model.ApiClass;
-import com.alibaba.auto.doc.config.ApiConfig;
 import com.alibaba.auto.doc.model.template.TemplateApiClass;
 import com.alibaba.auto.doc.template.BeetlTemplateUtil;
 import com.alibaba.auto.doc.utils.FileUtil;
 import com.alibaba.fastjson.JSON;
-
 import org.beetl.core.Template;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.util.List;
 
 /**
  * @author ：杨帆（舲扬）

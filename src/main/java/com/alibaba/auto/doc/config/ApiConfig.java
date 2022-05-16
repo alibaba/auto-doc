@@ -15,11 +15,11 @@
  */
 package com.alibaba.auto.doc.config;
 
-import java.util.List;
-
 import com.alibaba.auto.doc.constants.Constants;
 import com.alibaba.auto.doc.enums.DocLanguageEnum;
 import com.alibaba.auto.doc.model.request.RequestParam;
+
+import java.util.List;
 
 /**
  * @author ：杨帆（舲扬）
@@ -82,6 +82,11 @@ public class ApiConfig {
      * language support
      */
     private DocLanguageEnum language;
+
+    /**
+     * ignore auto-doc tag
+     */
+    private Boolean ignoreAutoDocTag = false;
 
 
     public String getProjectEndpoint() {
@@ -170,5 +175,13 @@ public class ApiConfig {
 
     public void setLanguage(DocLanguageEnum language) {
         this.language = language;
+    }
+
+    public Boolean getIgnoreAutoDocTag() {
+        return ignoreAutoDocTag;
+    }
+
+    public void setIgnoreAutoDocTag(Boolean ignoreAutoDocTag) {
+        this.ignoreAutoDocTag = ignoreAutoDocTag;
     }
 }
