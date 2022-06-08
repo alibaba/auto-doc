@@ -61,6 +61,9 @@ public class RequestParamHandler {
         Object required = annotation.getNamedParameter(SpringAnnotationParam.PROP_REQUIRED);
         if (required != null) {
             requestParam.setRequired(Boolean.parseBoolean(StringUtil.removeQuotes(required.toString())));
+        } else {
+            // default value for required in spring @RequestParam is true
+            requestParam.setRequired(true);
         }
 
         Object defaultValue = annotation.getNamedParameter(SpringAnnotationParam.PROP_DEFAULT_VALUE);
